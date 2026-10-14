@@ -1,0 +1,1 @@
+Fixed `semgrep-core` crashing on Linux with Python 3.15, where the stack limit was derived from an unlimited (`RLIM_INFINITY`) hard limit
