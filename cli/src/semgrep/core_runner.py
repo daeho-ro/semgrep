@@ -197,10 +197,6 @@ def setrlimits_preexec_fn() -> None:
 
     # Have candidates in case os unable to set certain limit
     potential_soft_limits = [
-        int(
-            hard_limit / 3
-        ),  # Larger fractions cause "current limit exceeds maximum limit" for unknown reason
-        int(hard_limit / 4),
         old_soft_limit * 100,
         old_soft_limit * 10,
         old_soft_limit * 5,
@@ -210,6 +206,13 @@ def setrlimits_preexec_fn() -> None:
         5120000,  # Magic numbers that seems to work for most cases
         old_soft_limit,
     ]
+    if hard_limit != resource.RLIM_INFINITY:
+        potential_soft_limits += [
+            int(
+                hard_limit / 3
+            ),  # Larger fractions cause "current limit exceeds maximum limit" for unknown reason
+            int(hard_limit / 4),
+        ]
 
     # Reverse sort so maximum possible soft limit is set
     potential_soft_limits.sort(reverse=True)
